@@ -1,7 +1,9 @@
-# Clip Agent
+# Clip Agent (Mac)
 
 Turn long YouTube videos (even 12-hour streams) into Shorts, TikToks and Reels, for free.
-It runs on your own Windows PC and opens like a website in your browser.
+It runs on your own Mac and opens like a website in your browser.
+
+This is a macOS build of [coder677777/clip-agent](https://github.com/coder677777/clip-agent).
 
 - Finds the moments worth posting (hot takes, stories, funny bits, emotional peaks) and scores each one out of 50
 - Splits long stories into Part 1 and Part 2, with a cliffhanger ending and a recap line
@@ -12,20 +14,25 @@ It runs on your own Windows PC and opens like a website in your browser.
 - Downloads only the parts it needs. No watermark, no minute limits, no subscription.
 - Updates itself every time you open it
 
-## Install (Windows, about 5 minutes, one time)
+## Install (Mac, about 5 minutes, one time)
 
-1. Press the **Windows key**, type **PowerShell**, and open **Windows PowerShell**.
+1. Open **Terminal** (press `Cmd+Space`, type **Terminal**, press Return).
 2. Paste this and press **Enter**:
 
    ```
-   irm https://raw.githubusercontent.com/coder677777/clip-agent/main/install.ps1 | iex
+   curl -fsSL https://raw.githubusercontent.com/jainaarav257-netizen/clip-agent-mac/main/install.sh | bash
    ```
 
-3. Wait for "Done!". It installs Python if you don't have it, sets everything up, puts a
-   **Clip Agent** icon on your desktop and in the Start menu, and opens the app.
+3. Wait for "Done!". It installs Python if you don't have it, sets everything up, and adds a
+   **Clip Agent** app to your Desktop and to `~/Applications`, then opens the app.
 
-From then on, just double-click the **Clip Agent** icon. It runs quietly in the background and
-opens at http://127.0.0.1:8765. You can bookmark that.
+From then on, just double-click **Clip Agent** on your Desktop (or in `~/Applications`). It runs
+quietly in the background and opens at http://127.0.0.1:8765. You can bookmark that.
+
+No Xcode or Homebrew is required — if you already have Python 3.10+ (check with `python3 --version`
+in Terminal) the installer uses it as-is. If you don't, and you have [Homebrew](https://brew.sh)
+installed, it installs Python for you; otherwise it points you to the official installer at
+python.org.
 
 ## First time in the app
 
@@ -52,12 +59,17 @@ Layouts:
 - **"Too many requests" from YouTube**: wait 20-30 minutes, or in Settings choose the browser
   you're signed in to YouTube with. If captions stay blocked, the app transcribes the audio itself
   (slower, roughly 10 minutes per hour of video).
+- **Reading cookies from Chrome, Edge or Brave asks for your Mac login password**: that's macOS
+  Keychain protecting the browser's saved logins, not a bug. Firefox doesn't need a password. Safari
+  may need you to grant Terminal (or the Clip Agent app) Full Disk Access in System Settings →
+  Privacy & Security.
 - **Gemini "free-tier limit"**: the free key has a daily cap. A 12-hour video uses about 12 requests.
 - **The page won't open**: double-click the Clip Agent icon again. A log is in
-  `%LOCALAPPDATA%\ClipAgent\clip-agent.log`.
+  `~/Library/Application Support/ClipAgent/clip-agent.log`.
 - **Reinstall or repair**: run the install command again. Your key and clips are kept.
 
 Clip your own videos, or channels that allow clipping. Reposting other people's content without
 permission can get your account struck.
 
-Your clips and settings live in `%LOCALAPPDATA%\ClipAgent`. Fonts: Poppins (SIL Open Font License).
+Your clips and settings live in `~/Library/Application Support/ClipAgent`. Fonts: Poppins (SIL Open
+Font License).

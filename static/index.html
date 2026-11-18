@@ -735,7 +735,7 @@ async function openSettings() {
         <div class="hint">YouTube can flag accounts used with downloaders. A spare Google account is the safest choice.</div>
       </details>
       <label for="sCookies" class="hint" style="display:block;margin-top:10px">Or read the login straight from a browser:</label>
-      <select id="sCookies">${[["", "Don't read it from a browser"], ["firefox", "Firefox (works on Windows)"], ["chrome", "Chrome (usually blocked on Windows)"], ["edge", "Edge (usually blocked on Windows)"], ["brave", "Brave (usually blocked on Windows)"]].map(([b, label]) => `<option value="${b}" ${(s.cookies_browser || "") === b ? "selected" : ""}>${label}</option>`).join("")}</select>
+      <select id="sCookies">${[["", "Don't read it from a browser"], ["firefox", "Firefox (no prompt)"], ["safari", "Safari (may need Full Disk Access)"], ["chrome", "Chrome (asks for your Mac login password)"], ["edge", "Edge (asks for your Mac login password)"], ["brave", "Brave (asks for your Mac login password)"]].map(([b, label]) => `<option value="${b}" ${(s.cookies_browser || "") === b ? "selected" : ""}>${label}</option>`).join("")}</select>
     </div>
     <div class="field"><label class="toggle"><input type="checkbox" id="sWfb" ${s.whisper_fallback !== false ? "checked" : ""}>If captions are blocked, transcribe the audio on this computer</label>
       <div class="hint">Slower (roughly 10 minutes per hour of video) but always works.</div></div>

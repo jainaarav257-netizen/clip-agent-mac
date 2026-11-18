@@ -12,7 +12,7 @@ import urllib.request
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-REPO = "coder677777/clip-agent"
+REPO = "jainaarav257-netizen/clip-agent-mac"
 BRANCH = "main"
 RAW = f"https://raw.githubusercontent.com/{REPO}/{BRANCH}/"
 STATUS = HERE / ".update_status.json"

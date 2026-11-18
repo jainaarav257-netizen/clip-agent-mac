@@ -156,7 +156,8 @@ def _is_cookie_error(e: Exception) -> bool:
 
 
 def run_ytdlp(fn):
-    """Run fn(opts). If reading the YouTube login fails (Chrome/Edge lock it on Windows), retry without it."""
+    """Run fn(opts). If reading the YouTube login fails (Chrome/Edge often block this - on the Mac it
+    usually means a Keychain prompt for "Chrome Safe Storage" was denied), retry without it."""
     global _COOKIES_BROKEN
     try:
         return fn(ytdlp_base_opts())
@@ -164,8 +165,8 @@ def run_ytdlp(fn):
         if not _is_cookie_error(e) or _COOKIES_BROKEN:
             raise
         _COOKIES_BROKEN = True
-        log("Couldn't read your YouTube login from the browser (Chrome and Edge lock it on Windows). "
-            "Continuing without it. Settings has a way that works with Chrome.")
+        log("Couldn't read your YouTube login from the browser (Chrome and Edge often block this). "
+            "Continuing without it. Settings has a way that works with Firefox.")
         return fn(ytdlp_base_opts())
 
 
