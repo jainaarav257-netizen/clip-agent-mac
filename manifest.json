@@ -1,7 +1,7 @@
 {
-  "version": "1.0.3-mac",
+  "version": "1.0.4-mac",
   "files": {
-    "clip_agent.py": "1f90816373b7b09ca3c0d547f93ef9ff9d0ce009347d40a7481528d6aa49fd3c",
+    "clip_agent.py": "c1114ba03cfbe248e32cf69f023414f3560048a7e7228d2010cd8d246ce4ab80",
     "server.py": "ffdc4ca4608d79d2689208959b343f8bf04929e1fd92018cd986aa4ac453e1bf",
     "updater.py": "4560bc7e6a674dfe6d221d3319efc75e4337944039f9a4d8cbfa9530999b378b",
     "launch.pyw": "cd79a1c7436946ad2eb3b10e94b94f4986b8e64f407afa87e96212c5b7fcfe70",

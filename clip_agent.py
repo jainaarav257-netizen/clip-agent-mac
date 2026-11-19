@@ -33,6 +33,7 @@ HERE = Path(__file__).resolve().parent
 FONTS_DIR = HERE / "fonts"
 CONFIG_PATH = HERE / "config.json"
 OUT_ROOT = HERE / "output"
+MODELS_DIR = HERE / "models"
 
 # --------------------------------------------------------------------------
 # small helpers
@@ -344,9 +345,10 @@ def _load_whisper(model_size: str):
     os.environ.setdefault("HF_HUB_ETAG_TIMEOUT", "60")
     os.environ.setdefault("HF_HUB_DISABLE_TELEMETRY", "1")
     from faster_whisper import WhisperModel
+    MODELS_DIR.mkdir(parents=True, exist_ok=True)
     for attempt in range(4):
         try:
-            return WhisperModel(model_size, device="cpu", compute_type="int8")
+            return WhisperModel(model_size, device="cpu", compute_type="int8", download_root=str(MODELS_DIR))
         except Exception as e:
             if attempt == 3 or not _is_network_blip(e):
                 raise RuntimeError(f"Couldn't download the speech model ({str(e)[:120]}). "
