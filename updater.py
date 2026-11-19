@@ -11,11 +11,16 @@ import time
 import urllib.request
 from pathlib import Path
 
-try:  # some Python installs (python.org on macOS without "Install Certificates.command") ship with
-    import certifi, ssl  # noqa: E401 - no system CA bundle, so urllib.request.urlopen fails every HTTPS call
-    ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=certifi.where())
+# Some Python installs (python.org on macOS without "Install Certificates.command") have no system CA
+# bundle. Pass this explicitly to urlopen() below rather than patching ssl's default context: urlopen()
+# builds and caches a global opener on its first-ever call using whatever context was default at that
+# moment, so a later patch (e.g. from launch.pyw's own startup check, which runs before this module is
+# even imported) would arrive too late.
+try:
+    import certifi, ssl
+    SSL_CTX = ssl.create_default_context(cafile=certifi.where())
 except Exception:
-    pass
+    SSL_CTX = None
 
 HERE = Path(__file__).resolve().parent
 REPO = "jainaarav257-netizen/clip-agent-mac"
@@ -27,7 +32,7 @@ STATUS = HERE / ".update_status.json"
 def _get(path: str, timeout: float = 8.0) -> bytes:
     req = urllib.request.Request(RAW + path + f"?t={int(time.time())}", headers={"Cache-Control": "no-cache",
                                                                                    "User-Agent": "clip-agent"})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
+    with urllib.request.urlopen(req, timeout=timeout, context=SSL_CTX) as r:
         return r.read()
 
 

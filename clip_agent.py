@@ -29,11 +29,15 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-try:  # some Python installs (python.org on macOS without "Install Certificates.command") ship with
-    import certifi, ssl  # noqa: E401 - no system CA bundle, so urllib.request.urlopen fails every HTTPS call
-    ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=certifi.where())
+# Some Python installs (python.org on macOS without "Install Certificates.command") have no system CA
+# bundle. Pass this explicitly to every urlopen() call below rather than patching ssl's default context:
+# urlopen() builds and caches a global opener on its first-ever call, using whatever context was default
+# at that moment, so a later patch (e.g. from launch.pyw's own startup check) would arrive too late.
+try:
+    import certifi, ssl
+    SSL_CTX = ssl.create_default_context(cafile=certifi.where())
 except Exception:
-    pass
+    SSL_CTX = None
 
 HERE = Path(__file__).resolve().parent
 FONTS_DIR = HERE / "fonts"
@@ -542,7 +546,7 @@ def _gemini_models(key: str) -> list[str]:
     try:
         req = urllib.request.Request("https://generativelanguage.googleapis.com/v1beta/models?pageSize=1000",
                                      headers={"x-goog-api-key": key})
-        with urllib.request.urlopen(req, timeout=30) as r:
+        with urllib.request.urlopen(req, timeout=30, context=SSL_CTX) as r:
             data = json.load(r)
         names = []
         for mdl in data.get("models", []):
@@ -621,7 +625,7 @@ def gemini_generate(prompt: str, key: str, model: str) -> str:
             req = urllib.request.Request(url, data=json.dumps(body).encode(),
                                          headers={"Content-Type": "application/json", "x-goog-api-key": key})
             try:
-                with urllib.request.urlopen(req, timeout=300) as r:
+                with urllib.request.urlopen(req, timeout=300, context=SSL_CTX) as r:
                     data = json.load(r)
                 parts = data["candidates"][0]["content"]["parts"]
                 _GEMINI_GOOD = m
@@ -698,7 +702,7 @@ def ollama_generate(prompt: str, model: str, host: str) -> str:
     req = urllib.request.Request(host.rstrip("/") + "/api/generate", data=json.dumps(body).encode(),
                                  headers={"Content-Type": "application/json"})
     try:
-        with urllib.request.urlopen(req, timeout=1800) as r:
+        with urllib.request.urlopen(req, timeout=1800, context=SSL_CTX) as r:
             return json.load(r)["response"]
     except urllib.error.URLError as e:
         raise RuntimeError(f"Couldn't reach Ollama at {host}. Is the Ollama app running? ({e})")
