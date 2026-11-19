@@ -118,7 +118,9 @@ PLIST
 cat > "$APP_DIR/Contents/MacOS/ClipAgent" <<SCRIPT
 #!/bin/bash
 cd "$DIR"
-exec "$VENV_PY" "$DIR/launch.pyw" "\$@"
+# Launch Services can run a double-clicked .app under Rosetta even on Apple
+# Silicon; pip installed native wheels, so pin the host's real architecture.
+exec arch -$(uname -m) "$VENV_PY" "$DIR/launch.pyw" "\$@"
 SCRIPT
 chmod +x "$APP_DIR/Contents/MacOS/ClipAgent"
 
