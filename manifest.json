@@ -1,12 +1,12 @@
 {
-  "version": "1.0.1-mac",
+  "version": "1.0.2-mac",
   "files": {
     "clip_agent.py": "1f90816373b7b09ca3c0d547f93ef9ff9d0ce009347d40a7481528d6aa49fd3c",
     "server.py": "ffdc4ca4608d79d2689208959b343f8bf04929e1fd92018cd986aa4ac453e1bf",
     "updater.py": "4560bc7e6a674dfe6d221d3319efc75e4337944039f9a4d8cbfa9530999b378b",
     "launch.pyw": "cd79a1c7436946ad2eb3b10e94b94f4986b8e64f407afa87e96212c5b7fcfe70",
     "requirements.txt": "4baab51b6686385e5ccfa847375935ca0d866877f4a79702786606810d233635",
-    "install.sh": "9dfc7f0dad507ac2dc937d66af02046e60cf2f3c2cd868c7c964c36cda41cbe9",
+    "install.sh": "89f0c43307a547241582ffe9db4a4d5846c1ba7427eabe2deb8ed8650b305bf9",
     "README.md": "4d947124c9880668256bed1b5f89a3c9c8de7db88cc5ab5ab526a52127884b2b",
     "icon.icns": "d1a0356c6ac62777940c890b91250687c08c86e6523652fe3034c176f6079ab8",
     "static/index.html": "977b15ae9ade9b85c7fda12506256c8149ce902cb679cd02570fa681cfb94094",

@@ -67,7 +67,9 @@ CERT_FILE="$("$VENV_PY" -c 'import certifi; print(certifi.where())' 2>/dev/null 
 say "Downloading Clip Agent..."
 ok=0
 for try in 1 2 3; do
-    if curl -fsSL "$RAW/updater.py?t=$(date +%s)" | "$VENV_PY" - ; then
+    # Fetched to a real file in $DIR (not piped via stdin) so updater.py's own
+    # __file__-relative paths resolve inside $DIR instead of the shell's cwd.
+    if curl -fsSL "$RAW/updater.py?t=$(date +%s)" -o "$DIR/updater.py" && (cd "$DIR" && "$VENV_PY" updater.py); then
         ok=1
         break
     fi
