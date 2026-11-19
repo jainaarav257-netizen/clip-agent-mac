@@ -29,6 +29,12 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
+try:  # some Python installs (python.org on macOS without "Install Certificates.command") ship with
+    import certifi, ssl  # noqa: E401 - no system CA bundle, so urllib.request.urlopen fails every HTTPS call
+    ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=certifi.where())
+except Exception:
+    pass
+
 HERE = Path(__file__).resolve().parent
 FONTS_DIR = HERE / "fonts"
 CONFIG_PATH = HERE / "config.json"
