@@ -85,4 +85,8 @@ def update(log=print) -> dict:
 
 
 if __name__ == "__main__":
-    print(update())
+    import sys as _sys
+    _res = update()
+    print(_res)
+    if _res.get("error"):
+        _sys.exit(1)

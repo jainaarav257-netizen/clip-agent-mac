@@ -57,6 +57,13 @@ fi
 
 "$VENV_PY" -m pip install --upgrade pip --quiet --disable-pip-version-check --timeout 120 --retries 10
 
+# Some python.org installs never run "Install Certificates.command", so Python's
+# own HTTPS calls fail with a cert-verify error. Give this venv a working CA
+# bundle via certifi so downloading the app doesn't silently fail.
+"$VENV_PY" -m pip install --quiet --disable-pip-version-check certifi || true
+CERT_FILE="$("$VENV_PY" -c 'import certifi; print(certifi.where())' 2>/dev/null || true)"
+[ -n "$CERT_FILE" ] && export SSL_CERT_FILE="$CERT_FILE"
+
 say "Downloading Clip Agent..."
 ok=0
 for try in 1 2 3; do
@@ -67,7 +74,7 @@ for try in 1 2 3; do
     say "That didn't finish, retrying ($try/3)..."
     sleep $((5 * try))
 done
-[ "$ok" = "1" ] || fail "Couldn't download Clip Agent (internet too slow?). Run the install command again."
+[ "$ok" = "1" ] || fail "Couldn't download Clip Agent (internet too slow, or a certificate problem). Run the install command again."
 
 # Bring over a Gemini key from an older Clip Agent folder, if there is one
 if [ ! -f "$DIR/config.json" ]; then
