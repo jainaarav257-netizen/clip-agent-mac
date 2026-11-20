@@ -110,6 +110,18 @@ def save_config(cfg: dict):
 
 
 def ffmpeg_exe() -> str:
+    # yt-dlp's clip-section downloader needs ffprobe alongside ffmpeg (to seek/remux precisely), not just
+    # ffmpeg itself. A system ffmpeg on PATH with no matching ffprobe (e.g. from an unrelated project) is
+    # worse than no system ffmpeg at all, since yt-dlp then reports a misleading "ffmpeg is not installed"
+    # instead of actually trying. Only trust PATH when both executables are present together.
+    if shutil.which("ffmpeg") and shutil.which("ffprobe"):
+        return shutil.which("ffmpeg")
+    try:
+        from static_ffmpeg import run
+        ffmpeg, _ffprobe = run.get_or_fetch_platform_executables_else_raise()
+        return ffmpeg
+    except Exception:
+        pass
     p = shutil.which("ffmpeg")
     if p:
         return p
@@ -117,7 +129,7 @@ def ffmpeg_exe() -> str:
         import imageio_ffmpeg
         return imageio_ffmpeg.get_ffmpeg_exe()
     except Exception:
-        raise RuntimeError("ffmpeg not found. Run the setup script again (it installs imageio-ffmpeg).")
+        raise RuntimeError("ffmpeg not found. Run the setup script again (it installs static-ffmpeg).")
 
 
 NO_WINDOW = 0x08000000 if os.name == "nt" else 0  # keep ffmpeg from flashing console windows on Windows
